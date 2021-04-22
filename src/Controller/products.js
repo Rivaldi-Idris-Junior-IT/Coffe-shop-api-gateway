@@ -6,9 +6,11 @@ const jwt = require("jsonwebtoken");
 
 exports.addProduct = async (req, res) => {
   try {
+    const apiURL = process.env.URL_ORM_HEROKU
+
     const filePath  = await cloudinary.uploader.upload(req.file.path)
 
-    const user = await api.post("/products/", {
+    const user = await api.post(apiURL+"/products/", {
       ...req.body,
       images: filePath.url,
       cloudinary_id: filePath.public_id
@@ -48,9 +50,12 @@ exports.addProduct = async (req, res) => {
 
 exports.getUpdate = async (req, res) => {
   try {
+
+    const apiURL = process.env.URL_ORM_HEROKU
+
     const filePath  = await cloudinary.uploader.upload(req.file.path)        
 
-    const product = await api.put(`/products/${req.params.id}`, {
+    const product = await api.put(apiURL+`/products/${req.params.id}`, {
       ...req.body,
       images: filePath.url,      
       cloudinary_id: filePath.public_id
@@ -91,7 +96,9 @@ exports.getUpdate = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        const user = await api.delete(`/products/${req.params.id}`);
+        const apiURL = process.env.URL_ORM_HEROKU
+
+        const user = await api.delete(apiURL+`/products/${req.params.id}`);
 
         return res.json(user.data);
     } catch (error) {
@@ -109,7 +116,9 @@ exports.delete = async (req, res) => {
 
 exports.getAllProducts = async (req, res) => {
     try {
-    const user = await api.get("/products/", req.body);
+    const apiURL = process.env.URL_ORM_HEROKU
+
+    const user = await api.get(apiURL+"/products/", req.body);
 
     let token = req.headers.authorization;
 

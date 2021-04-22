@@ -10,7 +10,9 @@ exports.register = async (req, res) => {
   try {
     const filePath  = await cloudinary.uploader.upload(req.file.path)
 
-    const user = await api.post("/users/register", {
+    const apiURL = process.env.URL_ORM_HEROKU
+
+    const user = await api.post(apiURL+"/users/register", {
       ...req.body,
       avatar: filePath.url,
       cloudinary_id: filePath.public_id
@@ -34,7 +36,9 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const user = await api.post("/users/login", req.body);
+    const apiURL = process.env.URL_ORM_HEROKU
+
+    const user = await api.post(apiURL+"/users/login", req.body);
 
     const data = user.data.result;
 
@@ -69,7 +73,9 @@ exports.login = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await api.get(`/users/${req.params.id}`)        
+        const apiURL = process.env.URL_ORM_HEROKU
+
+        const user = await api.get(apiURL+`/users/${req.params.id}`)        
 
         let token = req.headers.authorization;
 
@@ -105,10 +111,12 @@ exports.getProfile = async (req, res) => {
 
 exports.getUpdate = async (req, res) => {
     try {
+
+        const apiURL = process.env.URL_ORM_HEROKU
                               
         const filePath  = await cloudinary.uploader.upload(req.file.path)        
 
-        const user = await api.put(`/users/${req.params.id}`, {
+        const user = await api.put(apiURL+`/users/${req.params.id}`, {
           ...req.body, 
           avatar: filePath.url
         });
@@ -153,7 +161,9 @@ exports.getUpdate = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {                
-        const user = await api.delete(`/users/${req.params.id}`, req.body);
+        const apiURL = process.env.URL_ORM_HEROKU
+
+        const user = await api.delete(apiURL+`/users/${req.params.id}`, req.body);
 
         return res.json(user.data);
     } catch (error) {

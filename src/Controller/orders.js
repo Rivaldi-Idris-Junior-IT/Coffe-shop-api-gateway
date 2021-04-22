@@ -4,7 +4,9 @@ const jwt = require("jsonwebtoken");
 
 exports.getOrdersAll = async (req, res) => {
     try {
-        const order = await api.get(`/orders/`)        
+        const apiURL = process.env.URL_ORM_HEROKU
+
+        const order = await api.get(apiURL+`/orders/`)        
 
         let token = req.headers.authorization;
 
@@ -40,7 +42,9 @@ exports.getOrdersAll = async (req, res) => {
 
 exports.addOrders = async (req, res) => {
   try {
-    const user = await api.post("/orders/", req.body);
+    const apiURL = process.env.URL_ORM_HEROKU
+
+    const user = await api.post(apiURL+"/orders/", req.body);
 
     let token = req.headers.authorization;
 
@@ -74,7 +78,9 @@ exports.addOrders = async (req, res) => {
 
 exports.getUpdate = async (req, res) => {
   try {
-    const user = await api.put(`/orders/${req.params.id}`, req.body);
+    const apiURL = process.env.URL_ORM_HEROKU
+
+    const user = await api.put(apiURL+`/orders/${req.params.id}`, req.body);
 
     let token = req.headers.authorization;
 
@@ -108,7 +114,9 @@ exports.getUpdate = async (req, res) => {
 
 exports.delete = async (req, res) => {
   try {
-    const user = await api.delete(`/orders/${req.params.id}`);
+    const apiURL = process.env.URL_ORM_HEROKU
+    
+    const user = await api.delete(apiURL+`/orders/${req.params.id}`);
 
     return res.json(user.data);
   } catch (error) {
