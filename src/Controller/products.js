@@ -1,10 +1,18 @@
 const apiAdapter = require("../Helper/ApiAdapter");
+const cloudinary = require("../Middleware/Cloudinary");
+const upload = require("../Middleware/MulterUpload");
 const api = apiAdapter(process.env.URL_SERVICE_USER);
 const jwt = require("jsonwebtoken");
 
 exports.addProduct = async (req, res) => {
   try {
-    const user = await api.post("/products/", req.body);
+    const filePath  = await cloudinary.uploader.upload(req.file.path)
+
+    const user = await api.post("/products/", {
+      ...req.body,
+      images: filePath.url,
+      cloudinary_id: filePath.public_id
+    });
 
     let token = req.headers.authorization;
 
@@ -21,6 +29,7 @@ exports.addProduct = async (req, res) => {
     return res.json({
       success: true,
       result: user.data,
+      cloudinary_id: filePath.public_id,      
       token: encodedtoken,
     });
   } catch (error) {
@@ -30,15 +39,22 @@ exports.addProduct = async (req, res) => {
         message: "Service unavalaible",
       });
     }
-
-    const { data } = error.response;
-    return res.status(500).json(data);
+    
+    return res.status(500).json({
+      message: error.message
+    });
   }
 };
 
 exports.getUpdate = async (req, res) => {
   try {
-    const user = await api.put(`/products/${req.params.id}`, req.body);
+    const filePath  = await cloudinary.uploader.upload(req.file.path)        
+
+    const product = await api.put(`/products/${req.params.id}`, {
+      ...req.body,
+      images: filePath.url,      
+      cloudinary_id: filePath.public_id
+    });
 
     let token = req.headers.authorization;
 
@@ -54,7 +70,7 @@ exports.getUpdate = async (req, res) => {
 
     return res.json({
       success: true,
-      result: user.data,
+      result: product.data,
       token: encodedtoken,
     });
   } catch (error) {
@@ -65,8 +81,10 @@ exports.getUpdate = async (req, res) => {
       });
     }
 
-    const { status, data } = error.response;
-    return res.status(500).json(data);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 

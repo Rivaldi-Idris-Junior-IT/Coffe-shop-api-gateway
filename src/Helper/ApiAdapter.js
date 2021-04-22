@@ -4,6 +4,6 @@ module.exports = (baseUrl) => {
     return axios.create({
         baseURL: baseUrl,
         // 5 detik
-        timeout: 5000,
+        timeout: 20000,
     });
 }
