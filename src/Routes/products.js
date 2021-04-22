@@ -8,7 +8,7 @@ const upload = require('../Middleware/MulterUpload');
 userRoutes.post('/', verifyToken, upload.single('images'),  productController.addProduct);
 userRoutes.put('/:id', verifyToken, upload.single('images'), productController.getUpdate);
 userRoutes.delete('/:id', verifyToken, productController.delete);
-userRoutes.get('/', verifyToken, productController.getAllProducts);
+userRoutes.get('/', productController.getAllProducts);
 
 
 
