@@ -1,7 +1,7 @@
 const apiAdapter = require("../Helper/ApiAdapter");
 const cloudinary = require("../Middleware/Cloudinary");
 const upload = require("../Middleware/MulterUpload");
-const api = apiAdapter(process.env.URL_SERVICE_USER);
+const api = apiAdapter(process.env.URL_ORM_HEROKU);
 const jwt = require("jsonwebtoken");
 
 exports.addProduct = async (req, res) => {
